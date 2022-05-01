@@ -6,6 +6,9 @@ from django.contrib.auth.models import User
 class ChatBoard(models.Model):
     name = models.CharField(max_length=35, unique=True)
     details = models.CharField(max_length=150)
+    
+    def __str__(self):
+        return self.name
 
 class ChatTopic(models.Model):
     subject = models.CharField(max_length=250)
