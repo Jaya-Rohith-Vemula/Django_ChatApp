@@ -21,3 +21,7 @@ from .models import ChatBoard
 def home(request):
     chatBoard = ChatBoard.objects.all()
     return render(request, 'home.html', {'chatBoard':chatBoard})
+
+def board_topic(request, pk):
+    chat_board = ChatBoard.objects.get(pk = pk)
+    return render(request, 'chat_board_topics.html', {'chat_board':chat_board})
