@@ -21,7 +21,7 @@ from webchat import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     # path('homepage/', views.homepage, name='homepage'),
-    path('/',views.home,name='home'), #default home page
+    path('',views.home,name='home'), #default home page
     path('home/', views.home, name='home'),
     re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic')
 
