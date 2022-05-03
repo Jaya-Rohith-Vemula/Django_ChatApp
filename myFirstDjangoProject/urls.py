@@ -23,7 +23,8 @@ urlpatterns = [
     # path('homepage/', views.homepage, name='homepage'),
     path('',views.home,name='home'), #default home page
     path('home/', views.home, name='home'),
-    re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic')
+    re_path(r'^board_topic/(?P<pk>\d+)/$', views.board_topic, name='board_topic'),
+    re_path(r'^board_topic/(?P<pk>\d+)/new/$', views.new_board_topic, name='new_board_topic')
 
 ]
 
