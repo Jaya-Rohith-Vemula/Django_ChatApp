@@ -1,13 +1,12 @@
-from pydoc_data.topics import topics
-from urllib import response
+from email import message
 from django.shortcuts import render
 from django.shortcuts import get_object_or_404
 from django.shortcuts import redirect
 from django.http import HttpResponse
 from .models import ChatBoard
-from .models import ChatTopic
 from .models import Post
 from django.contrib.auth.models import User
+from .forms import NewChatTopicForm
 # Create your views here.
 
 # def homepage(request):
@@ -34,21 +33,22 @@ def board_topic(request, pk):
 
 def new_board_topic(request,pk):
     chat_board = get_object_or_404(ChatBoard, pk=pk)
+    user = User.objects.first()
 
     if request.method == 'POST':
-        subject = request.POST['subject']
-        message = request.POST['message']
+        form = NewChatTopicForm(request.POST)
+        if form.is_valid():
+            chatTopic = form.save(commit=False)
+            chatTopic.boardName = chat_board
+            chatTopic.boardStarter = user
+            chatTopic.save()
 
-        user = User.objects.first()
-        chatTopic = ChatTopic.objects.create(
-            subject=subject,
-            boardName=chat_board,
-            boardStarter = user)
-        post = Post.objects.create(
-            message=message,
-            topic=chatTopic,
-            createdBy=user)
+            post = Post.objects.create(
+                message=form.cleaned_data.get('message'),
+                topic=chatTopic,
+                createdBy=user)
+            return redirect('board_topic', pk=chat_board.pk)
+    else:
+        form = NewChatTopicForm()
 
-        return redirect('board_topic', pk=chat_board.pk)
-
-    return render(request, 'new_board_topic.html', {'chat_board':chat_board})
+    return render(request, 'new_board_topic.html', {'chat_board':chat_board, 'form':form})
